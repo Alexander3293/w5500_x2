@@ -28,6 +28,11 @@ extern SPI_HandleTypeDef hspi1;
 extern SPI_HandleTypeDef hspi2;
 #define SPI_WIZCHIP_dst				&hspi2
 
+#ifdef DEBUG_W5500
+	extern UART_HandleTypeDef 		huart1;
+	#define UART_WIZCHIP			&huart1
+#endif
+
 #define SOCK_TCPS        			0
 #define SOCK_UDPS					0
 

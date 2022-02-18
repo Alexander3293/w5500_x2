@@ -237,8 +237,8 @@ void wizchip_read_burst_src(uint8_t* pBuf, uint16_t len) //Read SPI
 void wizchip_write_burst_src(uint8_t* pBuf, uint16_t len) //Read SPI
 {
 #ifdef SPI_DMA
-	HAL_SPI_Transmit_DMA(SPI_WIZCHIP, pBuf, len);
-	while(HAL_SPI_GetState(SPI_WIZCHIP) == HAL_SPI_STATE_BUSY_TX);
+	HAL_SPI_Transmit_DMA(SPI_WIZCHIP_src, pBuf, len);
+	while(HAL_SPI_GetState(SPI_WIZCHIP_src) == HAL_SPI_STATE_BUSY_TX);
 #else
 	HAL_SPI_Transmit(SPI_WIZCHIP_src, pBuf, len, HAL_MAX_DELAY);
 #endif
@@ -398,7 +398,7 @@ int32_t loopback_tcps(uint8_t sn_src, uint8_t sn_dst, uint8_t* buf,
 	} /*else {
 	 uint8_t tmp_dst = 0;
 	 if (ctlwizchip(CW_GET_PHYLINK, (void*) &tmp_dst, DST) == -1)
-	 UART_Printf("Unknown PHY Link status.\r\n"); //Р СњР ВµР С‘Р В·Р Р†Р ВµРЎРѓРЎвЂљР Р…РЎвЂ№Р в„– РЎРѓРЎвЂљР В°РЎвЂљРЎС“РЎРѓ
+	 UART_Printf("Unknown PHY Link status.\r\n"); //Р В РЎСљР В Р’ВµР В РЎвЂ�Р В Р’В·Р В Р вЂ Р В Р’ВµР РЋР С“Р РЋРІР‚С™Р В Р вЂ¦Р РЋРІР‚в„–Р В РІвЂћвЂ“ Р РЋР С“Р РЋРІР‚С™Р В Р’В°Р РЋРІР‚С™Р РЋРЎвЂњР РЋР С“
 	 if (tmp_dst == PHYCFGR_LNK_ON)
 	 dst_connected = 1;
 	 else
@@ -476,7 +476,7 @@ int32_t loopback_udp(uint8_t sn_src, uint8_t sn_dst, uint8_t* buf,
 
 		case SOCK_CLOSED:
 			UART_Printf("%d:LBTStart\r\n", DST);
-			//Р РЋР С•Р В·Р Т‘Р В°Р Р…Р С‘Р Вµ РЎРѓР С•Р С”Р ВµРЎвЂљР В°
+			//Р В Р Р‹Р В РЎвЂўР В Р’В·Р В РўвЂ�Р В Р’В°Р В Р вЂ¦Р В РЎвЂ�Р В Р’Вµ Р РЋР С“Р В РЎвЂўР В РЎвЂќР В Р’ВµР РЋРІР‚С™Р В Р’В°
 			if ((ret = socket(sn_dst, Sn_MR_UDP, port + 1, 0x00, DST))
 					!= sn_dst)
 				return ret;
@@ -488,7 +488,7 @@ int32_t loopback_udp(uint8_t sn_src, uint8_t sn_dst, uint8_t* buf,
 	} //else {
 //		uint8_t tmp_dst = 0;
 //		if (ctlwizchip(CW_GET_PHYLINK, (void*) &tmp_dst, DST) == -1)
-//			UART_Printf("Unknown PHY Link status.\r\n"); //Р СњР ВµР С‘Р В·Р Р†Р ВµРЎРѓРЎвЂљР Р…РЎвЂ№Р в„– РЎРѓРЎвЂљР В°РЎвЂљРЎС“РЎРѓ
+//			UART_Printf("Unknown PHY Link status.\r\n"); //Р В РЎСљР В Р’ВµР В РЎвЂ�Р В Р’В·Р В Р вЂ Р В Р’ВµР РЋР С“Р РЋРІР‚С™Р В Р вЂ¦Р РЋРІР‚в„–Р В РІвЂћвЂ“ Р РЋР С“Р РЋРІР‚С™Р В Р’В°Р РЋРІР‚С™Р РЋРЎвЂњР РЋР С“
 //		if (tmp_dst == PHYCFGR_LNK_ON)
 //			dst_connected = 1;
 //		else
@@ -524,7 +524,9 @@ void UART_Printf(const char* fmt, ...) {
 	va_start(args, fmt);
 
 	vsnprintf(buff, sizeof(buff), fmt, args);
-	//HAL_UART_Transmit(UART_WIZCHIP, (uint8_t*) buff, strlen(buff), 10);
+#ifdef DEBUG_W5500
+	HAL_UART_Transmit(UART_WIZCHIP, (uint8_t*) buff, strlen(buff), 10);
+#endif
 	va_end(args);
 }
 
