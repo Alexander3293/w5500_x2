@@ -19,21 +19,21 @@
   Вся настройка W5500 осуществляется в файле wizchip_init.c
   В этой библиотеке выбор w5500 осуществляется выбором параметра структуры, определенной в файле ```c #include "wizchip_conf.h" ``` и имеет вид:
   ```c
-	typedef enum Choose_WizNet{
-		SRC,
-		DST
-	}CH_WIZNET;
+typedef enum Choose_WizNet{
+	SRC,
+	DST
+}CH_WIZNET;
 ```
   
 ## Функции приема-передачи данных
 
   Для передачи данных необходимо объявить макрос в соотвествии с выбранной шиной микроконтроллера, т.е. изменить в файле ```c #include "wizchip_init.h" ``` SPI_WIZCHIP_src и SPI_WIZCHIP_dst
 ```c
-	extern SPI_HandleTypeDef hspi1;
-	#define SPI_WIZCHIP_src  			&hspi1
+extern SPI_HandleTypeDef hspi1;
+#define SPI_WIZCHIP_src  			&hspi1
 
-	extern SPI_HandleTypeDef hspi2;
-	#define SPI_WIZCHIP_dst				&hspi2
+extern SPI_HandleTypeDef hspi2;
+#define SPI_WIZCHIP_dst				&hspi2
   ```
   
   Так общение с микросхемой W5500 идет по SPI, необходимо определить две функции cheap select. Далее все функции для микросхем будут написано с макросом xxx, Где вместо xxx src или dst, в зависимости от выбора W5500.
@@ -87,14 +87,14 @@ void wizchip_write_burst_src(uint8_t* pBuf, uint16_t len) //Read SPI
 Функции определяются вызовом API:
 
 ```c
-	/* Chip selection call back */
-	reg_wizchip_cs_cbfunc(wizchip_select_src, wizchip_deselect_src, SRC);
+/* Chip selection call back */
+reg_wizchip_cs_cbfunc(wizchip_select_src, wizchip_deselect_src, SRC);
 
-	reg_wizchip_cs_cbfunc(wizchip_select, wizchip_select); // CS must be tried with LOW.
-	/* SPI Read & Write callback function */
+reg_wizchip_cs_cbfunc(wizchip_select, wizchip_select); // CS must be tried with LOW.
+/* SPI Read & Write callback function */
 
-	reg_wizchip_spi_cbfunc(wizchip_read_src, wizchip_write_src, SRC);
-	reg_wizchip_spiburst_cbfunc(wizchip_read_burst_src, wizchip_write_burst_src, SRC);
+reg_wizchip_spi_cbfunc(wizchip_read_src, wizchip_write_src, SRC);
+reg_wizchip_spiburst_cbfunc(wizchip_read_burst_src, wizchip_write_burst_src, SRC);
 ```
 
 ## Критические секции
