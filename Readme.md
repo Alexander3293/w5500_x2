@@ -14,7 +14,7 @@
   - HTTP server
   - MQTT Client
   
-##Описание
+## Описание
 
   Вся настройка W5500 осуществляется в файле wizchip_init.c
   В этой библиотеке выбор w5500 осуществляется выбором параметра структуры, определенной в файле ```c #include "wizchip_conf.h" ``` и имеет вид:
@@ -25,7 +25,7 @@
 	}CH_WIZNET;
 ```
   
-## Фунуции приема-передачи данных
+## Функции приема-передачи данных
 
   Для передачи данных необходимо объявить макрос в соотвествии с выбранной шиной микроконтроллера, т.е. изменить в файле ```c #include "wizchip_init.h" ``` SPI_WIZCHIP_src и SPI_WIZCHIP_dst
 ```c
@@ -95,7 +95,7 @@ void wizchip_write_burst_src(uint8_t* pBuf, uint16_t len) //Read SPI
 
 	reg_wizchip_spi_cbfunc(wizchip_read_src, wizchip_write_src, SRC);
 	reg_wizchip_spiburst_cbfunc(wizchip_read_burst_src, wizchip_write_burst_src, SRC);
-	```
+```
 
 ## Критические секции
 
